@@ -24,7 +24,7 @@ services:
     ports:
       - "${PORT}:3000"
     env_file:
-      - ./server/.env 
+      - ./server/.env
     volumes:
       - ./server:/usr/src/app
       - /usr/src/app/node_modules
@@ -50,5 +50,20 @@ services:
       timeout: 15s
       retries: 5
 
+  pgadmin:
+    container_name: pgadmin
+    restart: always
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
+      PGADMIN_DEFAULT_PORT: ${PGADMIN_DEFAULT_PORT}
+    ports:
+      - "8001:80"
+    depends_on:
+      - db
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
 volumes:
   postgres-data:
+  pgadmin-data:

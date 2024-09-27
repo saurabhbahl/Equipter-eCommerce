@@ -1,6 +1,6 @@
-# Equipter Backend E-Commerce
+# Equipter E-Commerce
 
-This is the backend of the Equipter E-Commerce.
+
 
 ## 🛠️ Installation Steps with Docker
 
