@@ -8,7 +8,9 @@ import {
 } from "./controllers.js";
 
 const router = express.Router();
-
+router.get("/test",async(req,res)=>{
+  return res.json("Hello from server")
+})
 // Create a new user
 router.post("/users", createUser);
 

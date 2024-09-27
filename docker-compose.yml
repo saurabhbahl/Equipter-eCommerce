@@ -1,35 +1,54 @@
-# version: '3.8'
 services:
+  client:
+    container_name: frontend-react
+    restart: always
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    ports:
+      - "5173:5173"
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    volumes:
+      - ./client:/usr/src/app
+      - /usr/src/app/node_modules
+    depends_on:
+      - server
+
+  server:
+    container_name: express-server
+    restart: always
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    ports:
+      - "${PORT}:3000"
+    env_file:
+      - ./server/.env 
+    volumes:
+      - ./server:/usr/src/app
+      - /usr/src/app/node_modules
+    command: npx nodemon index.js
+    depends_on:
+      - db
+
   db:
+    container_name: postgress-database
+    restart: always
     image: postgres:13
-    container_name: postgres-database
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
-    volumes:
-      - db-data:/var/lib/postgresql/data
-
-  app:
-    build: .
-    container_name: node-eCommerce-Backend
-    restart: always
-    ports:
-      - "3000:3000"
-    depends_on:
-      - db
-    environment:
-      DB_HOST: ${DB_HOST}
-      DB_USER: ${DB_USER}
-      DB_PASSWORD: ${DB_PASSWORD}
-      DB_NAME: ${DB_NAME}
-      DB_PORT: ${DB_PORT}
-      PORT: ${PORT}
-    volumes:
-      - .:/usr/src/app
-    command: npx nodemon index.js
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER}"]
+      interval: 10s
+      timeout: 15s
+      retries: 5
 
 volumes:
-  db-data:
+  postgres-data:
