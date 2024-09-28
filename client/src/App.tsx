@@ -1,15 +1,22 @@
 import { useEffect, useState } from "react";
 import { BackendUrl } from "./utils/url";
+import Home from "./pages/Home";
+import Header from "./components/Header";
 
 export default function App() {
   const [result, setResult] = useState<any>(null);
-
+  console.log(result);
   useEffect(() => {
     (async () => {
-      let data = await fetch(`${BackendUrl}/api/test`);
-      let res = await data.json();
+      const data = await fetch(`${BackendUrl}/api/test`);
+      const res = await data.json();
       setResult(res);
     })();
   }, []);
-  return <>{result ? <div>{result}</div> : <p>Loading..</p>}</>;
+  return (
+    <>
+      <Header />
+      <Home />
+    </>
+  );
 }
