@@ -1,19 +1,24 @@
+version: "3"
+
 services:
   client:
     container_name: frontend-react
     restart: always
     build:
       context: ./client
-      dockerfile: Dockerfile
+      # dockerfile: Dockerfile
     ports:
       - "5173:5173"
     environment:
       - CHOKIDAR_USEPOLLING=true
     volumes:
-      - ./client:/usr/src/app
-      - /usr/src/app/node_modules
+      - ./client:/app
+      - /app/node_modules
     depends_on:
       - server
+    networks:
+      - equipter
+    entrypoint: sh -c "npm install && npm run dev"
 
   server:
     container_name: express-server
@@ -26,11 +31,13 @@ services:
     env_file:
       - ./server/.env
     volumes:
-      - ./server:/usr/src/app
-      - /usr/src/app/node_modules
-    command: npx nodemon index.js
+      - ./server:/app
+      - /app/node_modules
     depends_on:
       - db
+    networks:
+      - equipter
+    entrypoint: sh -c "npm install && npm run start:dev"  
 
   db:
     container_name: postgress-database
@@ -49,6 +56,8 @@ services:
       interval: 10s
       timeout: 15s
       retries: 5
+    networks:
+      - equipter
 
   pgadmin:
     container_name: pgadmin
@@ -64,6 +73,13 @@ services:
       - db
     volumes:
       - pgadmin-data:/var/lib/pgadmin
+    networks:
+      - equipter
+
 volumes:
   postgres-data:
   pgadmin-data:
+
+networks:
+  equipter:
+    driver: bridge

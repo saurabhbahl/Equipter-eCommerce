@@ -3,19 +3,17 @@
 FROM node:18
 
 
-WORKDIR /usr/src/app
+WORKDIR /app
+
+COPY package*.json /app/
+
+RUN ["npm","install"]
 
 
-COPY package*.json ./
-
-
-RUN npm install
-
-
-COPY . .
+COPY . /app
 
 
 EXPOSE 5173
 
 
-CMD ["npm", "run", "dev"]
+ENTRYPOINT ["npm", "run", "dev"]

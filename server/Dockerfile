@@ -2,22 +2,24 @@
 FROM node:18
 
 
-WORKDIR /usr/src/app
+# WORKDIR /usr/src/app
+WORKDIR /app
 
 
-COPY package*.json ./
+COPY package*.json /app
 
 
-RUN npm install
+RUN ["npm","install"]
 
 
-COPY . .
+COPY . /app
 
 
 EXPOSE 3000
 
 
-# CMD ["npm", "run", "dev"]
+
 # CMD [ "node", "index.js" ]
 # nodemon to run the app in development mode
-CMD ["npx", "nodemon", "index.js"]
+# ENTRYPOINT ["npx", "nodemon", "index.js"]
+ENTRYPOINT ["npm", "run", "start:dev"]
