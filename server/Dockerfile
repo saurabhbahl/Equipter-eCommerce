@@ -1,5 +1,5 @@
 # backend
-FROM node:18
+FROM node:18-alpine
 
 
 # WORKDIR /usr/src/app
@@ -9,7 +9,7 @@ WORKDIR /app
 COPY package*.json /app
 
 
-RUN ["npm","install"]
+RUN ["npm","install","--production"]
 
 
 COPY . /app

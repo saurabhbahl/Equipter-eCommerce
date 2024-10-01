@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import DynamicPage from "./pages/DynamicPage";
 import Header from "./components/Header";
 import Home from "./pages/Home";

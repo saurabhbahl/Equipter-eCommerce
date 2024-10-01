@@ -1,4 +1,4 @@
-function Loader({ span, roles = "status" }: { span: string; roles?: string }) {
+function Loader({ span, roles = "status" }: { span?: string; roles?: string }) {
   return (
     <div className="flex flex-col items-center w-full h-full justify-center">
       <div

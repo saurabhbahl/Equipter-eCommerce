@@ -1,3 +1,5 @@
+import { verifyRequestBody } from "../middlewares/checkRequestBody.js";
+
 export async function sFQuery(req, res) {
   try {
     let query = req.body.query || req.query.q;
@@ -41,5 +43,33 @@ export async function sFQuery(req, res) {
       message: "Internal server error",
       error: error.message,
     });
+  }
+}
+
+export async function sFAddNewObject(req, res) {
+  try {
+    const missingFields = verifyRequestBody(req.body, ["objectName"]);
+    if (missingFields) {
+      return res.status(400).json({ success: false, data: { missingFields } });
+    }
+    const objectUrl = `${process.env.SF_OBJECT_URL}/${req.body.objectName}`;
+    console.log(objectUrl);
+    const { objectName, ...dataToSend } = req.body;
+    const sFResp = await fetch(objectUrl, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${req.accessToken}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(dataToSend),
+    });
+    let sFRes = await sFResp.json();
+    if (sFRes.success) {
+      return res.status(201).json({ success: true, sFRes });
+    }
+    return res.status(400).json({ success: false, sFRes });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json(error);
   }
 }

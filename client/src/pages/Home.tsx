@@ -4,12 +4,12 @@ import SelectField from "../components/SelectFeild";
 
 const Home = () => {
   const [formData, setFormData] = useState({
-    firstname: "",
-    lastname: "",
+    firstName: "",
+    lastName: "",
     company: "",
-    phonenumber: "",
+    phoneNumber: "",
     email: "",
-    jobtitle: "",
+    jobTitle: "",
     state: "",
     industry: "",
   });
@@ -78,7 +78,7 @@ const Home = () => {
               id="firstname"
               name="firstname"
               required
-              value={formData.firstname}
+              value={formData.firstName}
               onChange={handleInputChange}
             />
 
@@ -86,10 +86,10 @@ const Home = () => {
             <InputField
               label="Last Name"
               type="text"
-              id="lastname"
-              name="lastname"
+              id="lastName"
+              name="lastName"
               required
-              value={formData.lastname}
+              value={formData.lastName}
               onChange={handleInputChange}
             />
 
@@ -108,10 +108,10 @@ const Home = () => {
             <InputField
               label="Phone Number"
               type="number"
-              id="phonenumber"
-              name="phonenumber"
+              id="phoneNumber"
+              name="phoneNumber"
               required
-              value={formData.phonenumber}
+              value={formData.phoneNumber}
               onChange={handleInputChange}
             />
 
@@ -129,10 +129,10 @@ const Home = () => {
             {/* Job Title Select */}
             <SelectField
               label="Job Title"
-              id="jobtitle"
-              name="jobtitle"
+              id="jobTitle"
+              name="jobTitle"
               required
-              value={formData.jobtitle}
+              value={formData.jobTitle}
               onChange={handleSelectChange}
               options={[
                 { value: "Co-Owner/Partner", label: "Co-Owner/Partner" },
@@ -182,7 +182,7 @@ const Home = () => {
                 <a
                   href="#"
                   target="_blank"
-                //   rel="nofollow noopener"
+                  //   rel="nofollow noopener"
                   className="text-custom-orange"
                 >
                   Privacy Policy
