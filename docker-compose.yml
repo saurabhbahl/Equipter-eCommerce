@@ -6,14 +6,14 @@ services:
     restart: always
     build:
       context: ./client
-      # dockerfile: Dockerfile
+      dockerfile: Dockerfile
     ports:
       - "5173:5173"
     environment:
       - CHOKIDAR_USEPOLLING=true
     volumes:
       - ./client:/app
-      - /client/node_modules:/app/node_modules
+      # - ./client/node_modules:/app/node_modules
     depends_on:
       - server
     networks:
@@ -32,12 +32,14 @@ services:
       - ./server/.env
     volumes:
       - ./server:/app
-      - ./server/node_modules:/app/node_modules
+      # - ./server/node_modules:/app/node_modules
     depends_on:
       - db
+    environment:
+      - CHOKIDAR_USEPOLLING=true
     networks:
       - equipter
-    entrypoint: sh -c "npm install && npm run start:dev"  
+    entrypoint: sh -c "npm install && npm run start:dev"
 
   db:
     container_name: postgress-database

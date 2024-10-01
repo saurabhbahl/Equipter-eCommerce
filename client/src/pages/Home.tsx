@@ -75,8 +75,8 @@ const Home = () => {
             <InputField
               label="First Name"
               type="text"
-              id="firstname"
-              name="firstname"
+              id="firstName"
+              name="firstName"
               required
               value={formData.firstName}
               onChange={handleInputChange}
