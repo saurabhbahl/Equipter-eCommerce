@@ -1,5 +1,5 @@
 import { DataTypes, Model } from "sequelize";
-import { sequelize as db } from "./dbConnection.js";
+import { sequelize as db } from "../config/dbConnection.js";
 // export class User extends Model {}
 
 // User.init({

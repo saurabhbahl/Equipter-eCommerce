@@ -1,17 +1,19 @@
 import express from "express";
 import dotenv from "dotenv";
-import router from "./routes.js";
-import { sequelize } from "./dbConnection.js";
+import { sequelize } from "./config/dbConnection.js";
 import cors from "cors";
+import salesForceRouter from "./routes/salesForce.routes.js";
+import { checkSFAccessToken } from "./middlewares/sFMiddlewares.js";
 dotenv.config();
 const app = express();
 app.use(express.json());
 app.use(cors());
-app.use("/api", router);
+
+app.use("/api/v1/sf", salesForceRouter);
 
 app.post("/", async (req, res) => {
   try {
-    let sfRes = await fetch(process.env.SF_ACCESS_TOKEN, {
+    let sfRes = await fetch(process.env.SF_ACCESS_TOKEN_URL, {
       method: "post",
     });
     sfRes = await sfRes.json();
