@@ -76,12 +76,19 @@ const DynamicPage = () => {
     fetchProducts();
   }, [newRes.loading]);
 
-  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {    
+  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     const { name, value } = e.target;
     const parsedValue =
       name === "Product_Price__c" ? (value ? Number(value) : null) : value;
     setInputData({ ...inputData, [name]: parsedValue });
-    
+    if (inputData.name.length >= 2) {
+      console.log("call");
+      setError({ ...error, name: "" });
+    }
+    if ((inputData.Product_Price__c as number) > 0) {
+      console.log("call");
+      setError({ ...error, Product_Price__c: "" });
+    }
   }
 
   async function handleAddNew() {
@@ -124,10 +131,8 @@ const DynamicPage = () => {
           setNewRes({ feedbackMessage: null, loading: false, color: null });
         }, 2000);
       } else {
-    
         setNewRes({
-          feedbackMessage:
-            "Failed to add product",
+          feedbackMessage: "Failed to add product",
           loading: false,
           color: "red",
         });
