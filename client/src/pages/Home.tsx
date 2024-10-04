@@ -194,7 +194,7 @@ const Home = () => {
               <input
                 type="submit"
                 value="Build Now"
-                className="font-arial rounded-none bg-custom-orange text-white hover:bg-custom-orange focus:outline-none cursor-pointer px-8 py-2.5 uppercase"
+                className="btn-yellow"
               />
             </div>
           </form>

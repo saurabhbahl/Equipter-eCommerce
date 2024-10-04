@@ -16,6 +16,9 @@ const Header = () => {
           <Link to={"/dynamicpage"} className="font-work-sans text-custom-orange">
             Dynamic Page
           </Link>
+          <Link to={"/login"} className="font-work-sans text-custom-orange">
+            Login
+          </Link>
         </div>
       </div>
     </header>

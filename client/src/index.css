@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -26,6 +26,10 @@ html.modal-open footer {
 /*Build Form*/
 .build-form {
   background-color: hsla(0, 0%, 94%, 0.88);
+}
+/* Tailwind css custom components */
+.btn-yellow {
+  @apply font-arial rounded-none bg-custom-orange/80 transition-all ease-out duration-200  text-white hover:bg-custom-orange focus:outline-none cursor-pointer px-8 py-2.5 uppercase hover:shadow-2xl shadow-md;
 }
 
 /**/
