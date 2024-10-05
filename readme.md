@@ -31,20 +31,34 @@
        git clone https://github.com/saurabhbahl/Equipter-Backend-E-Commerce.git
 
 
-6. **Ensure Your .env File is Properly Set Up in root and server folders:**
+6. **Ensure Your .env File is Properly Set Up in server folder:**
    If the environment variables for the database are not set correctly (e.g., missing POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_DB), the container might hang while trying to initialize.    Double-check your .env file to ensure it contains the correct values, like this:
 
 
-       POSTGRES_USER=your_user
-       POSTGRES_PASSWORD=your_password
-       POSTGRES_DB=your_database
-       DB_HOST=db
-       DB_USER=your_user
-       DB_PASSWORD=your_password
-       DB_NAME=your_database
+       DB_HOST='db_host'
+       DB_USER='user'
+       DB_PASSWORD='password'
+       DB_NAME='db'
        DB_PORT=5432
        PORT=3000
-       SF_ACCESS_TOKEN=Your Token 
+       DB_URL='postgresql://user:password@db_host:5432/db?schema=public'
+
+       POSTGRES_USER='user'
+       POSTGRES_PASSWORD='password'
+       POSTGRES_DB='db'
+       SF_ACCESS_TOKEN_URL='https://login.salesforce.com/services/oauth2/token?grant_type=password&client_id=3MVG9dummyclientid&client_secret=clientsecret&username=user@example.com&password=password'
+
+       SF_INSTANCE_URL='https://-instance.salesforce.com'
+       SF_CLIENT_ID='3MVG9clientid'
+       SF_CLIENT_SECRET='clientsecret'
+       SF_USERNAME='user@example.com'
+       SF_PASSWORD='password'
+       SF_SECURITY_TOKEN='securitytoken'
+       SF_OBJECT_URL='https://-instance.salesforce.com/services/data/v52.0/sobjects'
+
+
+      # Client's .env
+       VITE_BACKEND_URL=http://localhost:3000
 
 7. **Before running the project make sure that Docker Desktop is running on your computer:**
 

@@ -1,55 +1,23 @@
-import { DataTypes, Model } from "sequelize";
-import { sequelize as db } from "../config/dbConnection.js";
-// export class User extends Model {}
+import {
+  pgTable,
+  serial,
+  text,
+  uniqueIndex,
+  varchar,
+  pgEnum,
+} from "drizzle-orm/pg-core";
 
-// User.init({
-//   id: {
-//     type: DataTypes.INTEGER,
-//     autoIncrement: true,
-//     primaryKey: true,
-//     allowNull: false,
-//   },
-//   name: {
-//     type: DataTypes.STRING,
-//     allowNull: false,
-//   },
-//   email: {
-//     type: DataTypes.STRING,
-//     allowNull: false,
-//     unique: true,
-//   },
-//   age: {
-//     type: DataTypes.INTEGER,
-//     allowNull: false,
-//   },
-// });
-
-// (async () => {
-//   await sequelize.sync();
-// })();
-
-export const User = db.define(
-  "User",
+export const userRoles = pgEnum("role", ["admin", "user"]);
+export const users = pgTable(
+  "users",
   {
-    id: {
-      type: DataTypes.INTEGER,
-      autoIncrement: true,
-      primaryKey: true,
-      allowNull: false,
-    },
-    name: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    email: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      unique: true,
-    },
-    age: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    },
+    id: serial("id").primaryKey(),
+    name: text("name").notNull(),
+    email: varchar("email", { length: 255 }).notNull().unique(),
+    password: varchar("password", { length: 255 }).notNull(),
+    role: userRoles("role").default("user").notNull(),
   },
-  { timestamps: true }
+  (users) => ({
+    uniqueEmailIndex: uniqueIndex("unique_email_idx").on(users.email),
+  })
 );
