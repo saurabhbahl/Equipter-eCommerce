@@ -1,4 +1,4 @@
-version: "3.8"
+version: "3.9"
 
 services:
   client:
@@ -45,7 +45,7 @@ services:
       - "host.docker.internal:host-gateway"
 
   db:
-    container_name: postgress-database
+    container_name: postgres-database
     restart: always
     image: postgres:13
     # environment:
