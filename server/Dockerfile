@@ -1,32 +1,7 @@
-# # backend
-# FROM node:18-alpine
-
-
-# # WORKDIR /usr/src/app
-# WORKDIR /app
-
-
-# COPY package*.json /app
-
-
-# RUN ["npm","install","--production"]
-
-
-# COPY . /app
-
-
-# EXPOSE 3000
-
-
-
-# # CMD [ "node", "index.js" ]
-# # nodemon to run the app in development mode
-# # ENTRYPOINT ["npx", "nodemon", "index.js"]
-# ENTRYPOINT ["npm", "run", "start:dev"]
 
 
 # backend
-FROM node:18-alpine
+FROM node:18
 
 
 WORKDIR /app
@@ -37,12 +12,17 @@ COPY package*.json ./
 
 RUN ["npm","install"]
 
-RUN apk add --no-cache postgresql-client
+RUN apt-get update && \
+    apt-get install -y postgresql-client && \
+    rm -rf /var/lib/apt/lists/*
 
-COPY . .
 
 
-COPY server.sh ./
+COPY . /app
+
+
+COPY server.sh  /app/server.sh
+
 
 
 RUN chmod +x server.sh
@@ -51,4 +31,4 @@ RUN chmod +x server.sh
 EXPOSE 3000
 
 
-ENTRYPOINT ["./server.sh"]
+ENTRYPOINT ["sh","server.sh"]

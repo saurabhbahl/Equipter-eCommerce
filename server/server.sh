@@ -1,10 +1,10 @@
 #!/bin/sh
-echo "installing packages............"
+echo "Installing packages........"
 npm install
 
+make_db() {  
 
-makedb(){
- DB_NAME=${POSTGRES_DB}
+    DB_NAME=${POSTGRES_DB}
  echo "Database Name: ${DB_NAME}" 
 
  DB_NAME=${DB_NAME}
@@ -14,25 +14,28 @@ makedb(){
  DB_PORT=${DB_PORT}
 
 
-export PGPASSWORD="$DB_PASSWORD"
+# export PGPASSWORD="$DB_PASSWORD"
 
 
     echo "Creating database..."
-    psql -h postgres-database -U "$DB_USER" -d postgres -c "CREATE DATABASE ${DB_NAME} IF NOT EXISTS"
-    echo "Database ${DB_NAME} created successfully."
 
+    PGPASSWORD=${DB_PASSWORD} psql -U postgres -d postgres -c "CREATE DATABASE ${DB_NAME};"
 
+    echo "Database created successfully."
+
+    sleep 5
 }
-makedb
 
-echo "generating migration............."
+make_db
+
 npm run db:generate
+sleep 5
 
-echo "migrating database............."
 npm run db:migrate
+sleep 5 
 
-echo "seeding database............."
 npm run db:seed
+sleep 5
 
-echo "running the server............."
+
 npm run start:dev
