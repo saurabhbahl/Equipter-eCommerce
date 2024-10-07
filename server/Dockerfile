@@ -45,7 +45,7 @@ COPY . .
 COPY server.sh ./
 
 
-RUN chmod +x ./server.sh
+RUN chmod +x server.sh
 
 
 EXPOSE 3000
