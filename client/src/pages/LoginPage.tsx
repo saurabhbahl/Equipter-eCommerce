@@ -3,12 +3,14 @@ import InputField from "../components/InputFeild";
 import { IUserLogin, userSchema } from "../types/schemas/UserSchemas";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
+import { useAuth } from "../hooks/useAuth";
 
 const LoginPage = () => {
   const [formData, setFormData] = useState<IUserLogin>({
     email: "",
     password: "",
   });
+  const {loginAction}=useAuth();
 
   const [errors, setErrors] = useState<IUserLogin>({
     email: null,
@@ -22,7 +24,7 @@ const LoginPage = () => {
     setErrors({ ...errors, [name]: null });
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit =async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const result = userSchema.safeParse(formData);
@@ -36,6 +38,7 @@ const LoginPage = () => {
       setErrors(newErrors);
       return;
     }
+    await loginAction(formData)
   };
 
   const togglePasswordVisibility = () => {

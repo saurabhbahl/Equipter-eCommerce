@@ -1,9 +1,19 @@
 import { faker } from "@faker-js/faker";
 import { dbInstance } from "../config/dbConnection.cjs";
 import { users } from "../models/userModel.js";
+import { getSalt, hashPassword } from "../utils/jwtUtils.js";
 
 export async function userSeed() {
-  const dummyUsers = [];
+  const salt = await getSalt();
+  const hashedPassword = await hashPassword("123456", salt);
+  const dummyUsers = [
+    {
+      name: "test",
+      email: "test@test.com",
+      password: hashedPassword,
+      role: "admin",
+    },
+  ];
   for (let i = 0; i < 15; i++) {
     dummyUsers.push({
       name: faker.person.fullName(),
@@ -20,5 +30,3 @@ export async function userSeed() {
     console.error("Error seeding database:", error);
   }
 }
-
-

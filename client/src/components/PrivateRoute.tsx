@@ -3,7 +3,7 @@
 // import { Navigate } from "react-router-dom";
 
 import { Navigate, Outlet } from "react-router-dom";
-
+import { useAuth } from "../hooks/useAuth";
 
 // interface PrivateRouteProps {
 //   Component: React.ComponentType;
@@ -18,9 +18,9 @@ import { Navigate, Outlet } from "react-router-dom";
 // export default PrivateRoute;
 
 export const PrivateRoute = () => {
-  // const { user } = useAuth();
-  const isAuth = false;
-  if (!isAuth) {
+  const { token } = useAuth();
+
+  if (!token) {
     return <Navigate to={"/login"} />;
   }
   return <Outlet />;

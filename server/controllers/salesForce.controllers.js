@@ -1,5 +1,5 @@
 import { verifyRequestBody } from "../middlewares/checkRequestBody.js";
-
+//Used to perform the query in salesforce data
 export async function sFQuery(req, res) {
   try {
     let query = req.body.query || req.query.q;
@@ -45,7 +45,7 @@ export async function sFQuery(req, res) {
     });
   }
 }
-
+//For adding the new object in salesForce
 export async function sFAddNewObject(req, res) {
   try {
     const missingFields = verifyRequestBody(req.body, ["objectName"]);

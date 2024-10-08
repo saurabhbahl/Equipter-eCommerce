@@ -1,11 +1,12 @@
 import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
+import { connection } from "./config/dbConnection.cjs";
 
 import salesForceRouter from "./routes/salesForce.routes.js";
-
 import userRouter from "./routes/userRoutes.js";
-import { connection } from "./config/dbConnection.cjs";
+import authRouter from "./routes/auth.routes.js";
+import { verifyToken } from "./middlewares/verifyToken.js";
 
 dotenv.config();
 const app = express();
@@ -14,7 +15,8 @@ app.use(cors());
 
 // routes
 app.use("/api/v1/sf", salesForceRouter);
-app.use("/api/user", userRouter);
+app.use("/api/v1/user", verifyToken, userRouter);
+app.use("/api/v1/auth", authRouter);
 
 app.all("/api/*", async (req, res) => {
   try {

@@ -53,7 +53,7 @@ const DynamicPage = () => {
       };
 
       try {
-        const response = await fetch(`${BackendUrl}/api/v1/sf/query`, {
+        const response = await fetch(`${BackendUrl}/sf/query`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -111,7 +111,7 @@ const DynamicPage = () => {
     setNewRes({ feedbackMessage: null, loading: true, color: null });
 
     try {
-      const raw = await fetch(`${BackendUrl}/api/v1/sf/object/new`, {
+      const raw = await fetch(`${BackendUrl}/sf/object/new`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -193,7 +193,7 @@ const DynamicPage = () => {
               {newRes.loading ? <Loader /> : "Add Product"}
             </button>
           </div>
-          {dataState.data.records.length > 0 ? (
+          {dataState?.data?.records?.length > 0 ? (
             <table className="max-w-3xl mx-auto shadow-md my-10 bg-white border border-gray-300 rounded-lg overflow-hidden">
               <thead>
                 <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
