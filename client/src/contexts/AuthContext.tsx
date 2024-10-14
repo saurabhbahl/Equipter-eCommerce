@@ -1,7 +1,8 @@
-import { createContext, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { User } from "../types/schemas/UserSchemas";
 import { BackendUrl } from "../utils/url";
+import * as Cookies from "js-cookie";
 
 interface AuthContextType {
   token: string;
@@ -10,10 +11,34 @@ interface AuthContextType {
   logOut: () => void;
 }
 export const AuthContext = createContext<AuthContextType | null>(null);
+const cookie=Cookies.get("token")
+console.log("cookie.",cookie)
+function getCookie(cname:string) {
+  const allcookies = document.cookie;
+  const arrayb = allcookies.split(";");
+console.log(allcookies,arrayb)
 
+  for (let i = 0; i < arrayb.length; i++) {
+    const item = arrayb[i].trim();
+    if (item.startsWith(cname + "=")) {
+      return item.substring((cname + "=").length);
+    }
+  }
+  return null; 
+}
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState(null);
-  const [token, setToken] = useState(localStorage.getItem("token") || "");
+  const [token, setToken] = useState("");
+
+  // const [token, setToken] = useState(localStorage.getItem("token") || "");
+  useEffect(() => {
+    const storedToken = getCookie("token");
+    console.log(storedToken);
+    if (storedToken) {
+      setToken(storedToken);
+    }
+  }, []);
+
   const navigate = useNavigate();
   const loginAction = async (data: any) => {
     try {
@@ -23,9 +48,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(data),
+        credentials: "include",
       });
       const res = await response.json();
-      console.log(res)
+      console.log(res);
       if (res.success) {
         setUser(res.userData);
         setToken(res.token);
@@ -47,6 +73,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   return (
+ 
     <AuthContext.Provider value={{ token, user, loginAction, logOut }}>
       {children}
     </AuthContext.Provider>
