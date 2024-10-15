@@ -26,8 +26,12 @@ export async function hashPassword(password, salt) {
 }
 
 // Function to generate JWT token
-export async function generateToken(userData, expiry = "3h") {
-  const token = jwt.sign(userData, JWT_SECRET, {
+export async function generateToken(
+  userData,
+  secret = JWT_SECRET,
+  expiry = "3h",
+) {
+  const token = jwt.sign(userData, secret, {
     algorithm: "HS256",
     expiresIn: expiry,
   });
@@ -43,4 +47,18 @@ export async function generateToken(userData, expiry = "3h") {
   console.log("Encrypted Data: ", encryptedData.toString("base64"));
   return encryptedData.toString("base64");
   // return token
+}
+export async function decryptToken(token) {
+  console.log("Token",token)
+  const decryptedTokenBuffer = crypto.privateDecrypt(
+    {
+      key: privateKey,
+      padding: crypto.constants.RSA_PKCS1_OAEP_PADDING,
+      oaepHash: TOKEN_ENC_ALGO,
+    },
+    Buffer.from(token, "base64")
+  );
+
+  const decryptedToken = decryptedTokenBuffer.toString("utf8");
+  return decryptedToken;
 }

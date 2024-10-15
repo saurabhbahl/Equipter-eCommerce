@@ -9,7 +9,9 @@ const privateKey = fs.readFileSync("./private.key", "utf8");
 // Middleware to verify JWT token
 export function verifyToken(req, res, next) {
   console.log("call");
-  const token = req.headers["authorization"];
+  const authHeader=req.headers["authorization"];
+  const token = authHeader ? authHeader.split(" ")[1] : req.cookies.token;
+  console.log("Cookie",req.cookies.token)
 
   if (!token) {
     return res.status(403).json({
@@ -19,8 +21,8 @@ export function verifyToken(req, res, next) {
   }
 
   try {
-    const tokenWithoutBearer = token.split(" ")[1];
-    console.log("Token received:", tokenWithoutBearer);
+    // const tokenWithoutBearer = token.split(" ")[1];
+    console.log("Token received:", token);
     
     const decryptedTokenBuffer = crypto.privateDecrypt(
       {
@@ -28,7 +30,7 @@ export function verifyToken(req, res, next) {
         padding: crypto.constants.RSA_PKCS1_OAEP_PADDING,
         oaepHash: TOKEN_ENC_ALGO,
       },
-      Buffer.from(tokenWithoutBearer, "base64")
+      Buffer.from(token, "base64")
     );
 
     const decryptedToken = decryptedTokenBuffer.toString("utf8");

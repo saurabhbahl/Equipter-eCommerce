@@ -2,15 +2,17 @@ import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 import { connection } from "./config/dbConnection.cjs";
+import cookieParser from 'cookie-parser'
 
 import salesForceRouter from "./routes/salesForce.routes.js";
 import userRouter from "./routes/userRoutes.js";
 import authRouter from "./routes/auth.routes.js";
 import { verifyToken } from "./middlewares/verifyToken.js";
-
 dotenv.config();
+
 const app = express();
 app.use(express.json());
+app.use(cookieParser())
 app.use(cors({
   origin: process.env.FRONTEND_URL,
   credentials: true, 
