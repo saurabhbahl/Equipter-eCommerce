@@ -4,12 +4,13 @@
 //   ],
 import { defineConfig } from "drizzle-kit";
 import dotenv from "dotenv";
+import { DB_URL } from "./useENV.js";
 dotenv.config();
 export default defineConfig({
   schema: "models/userModel.js",
   out: "./drizzle/migrations",
   dbCredentials: {
-    url: process.env.DB_URL,
+    url: DB_URL,
   },
   dialect: "postgresql",
 });

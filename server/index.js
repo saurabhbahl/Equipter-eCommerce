@@ -2,26 +2,32 @@ import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 import { connection } from "./config/dbConnection.cjs";
-import cookieParser from 'cookie-parser'
+
 
 import salesForceRouter from "./routes/salesForce.routes.js";
 import userRouter from "./routes/userRoutes.js";
 import authRouter from "./routes/auth.routes.js";
-import { verifyToken } from "./middlewares/verifyToken.js";
+import { checkAdminRole, verifyToken } from "./middlewares/verifyToken.js";
+import adminRouter from "./routes/admin.routes.js";
+import { FRONTEND_URL, PORT } from "./useENV.js";
+
 dotenv.config();
 
 const app = express();
 app.use(express.json());
-app.use(cookieParser())
-app.use(cors({
-  origin: process.env.FRONTEND_URL,
-  credentials: true, 
-}));
+// app.use(cookieParser());
+app.use(
+  cors({
+    origin: FRONTEND_URL,
+    credentials: true,
+  })
+);
 
 // routes
-app.use("/api/v1/sf", salesForceRouter);
-app.use("/api/v1/user", verifyToken, userRouter);
+app.use("/api/v1/sf", verifyToken, checkAdminRole, salesForceRouter);
+app.use("/api/v1/user", verifyToken, checkAdminRole, userRouter);
 app.use("/api/v1/auth", authRouter);
+app.use("/api/v1/admin",  adminRouter);
 
 app.all("/api/*", async (req, res) => {
   try {
@@ -45,7 +51,7 @@ connection.connect((err, client, release) => {
     console.error("Error connecting to the database:=>", err, err.stack);
   } else {
     console.log("connected to database successfully");
-    const PORT = process.env.PORT;
+    
     app.listen(PORT, () => {
       console.log(`Server running on http://localhost:${PORT}`);
     });

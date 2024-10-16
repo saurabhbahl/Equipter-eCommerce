@@ -12,7 +12,8 @@ export const userSchema = z.object({
 
 export interface User {
   id: string;
-  name: string;
-  email: string;
-  authToken?: string;
+  name?: string;
+  email?: string;
+  token?: string;
+  role: string;
 }

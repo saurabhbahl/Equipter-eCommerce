@@ -3,6 +3,7 @@ import fs from "fs";
 import crypto from "crypto";
 import jwt from "jsonwebtoken";
 import { JWT_SECRET, TOKEN_ENC_ALGO } from "../useENV.js";
+import { console } from "inspector";
 
 const privateKey = fs.readFileSync("./private.key", "utf8");
 const publicKey = fs.readFileSync("./public.key", "utf8");
@@ -31,22 +32,25 @@ export async function generateToken(
   secret = JWT_SECRET,
   expiry = "3h",
 ) {
+  console.time()
   const token = jwt.sign(userData, secret, {
     algorithm: "HS256",
     expiresIn: expiry,
   });
-  const encryptedData = crypto.publicEncrypt(
-    {
-      key: publicKey,
-      padding: crypto.constants.RSA_PKCS1_OAEP_PADDING,
-      oaepHash: TOKEN_ENC_ALGO,
-    },
-    Buffer.from(token)
-  );
+  
+  // const encryptedData = crypto.publicEncrypt(
+  //   {
+  //     key: publicKey,
+  //     padding: crypto.constants.RSA_PKCS1_OAEP_PADDING,
+  //     oaepHash: TOKEN_ENC_ALGO,
+  //   },
+  //   Buffer.from(token)
+  // );
 
-  console.log("Encrypted Data: ", encryptedData.toString("base64"));
-  return encryptedData.toString("base64");
-  // return token
+  // console.log("Encrypted Data: ", encryptedData.toString("base64"));
+  // return encryptedData.toString("base64");
+  console.timeLog()
+  return token
 }
 export async function decryptToken(token) {
   console.log("Token",token)

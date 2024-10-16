@@ -21,7 +21,7 @@ const Home = () => {
   const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
-  console.log(formData);
+ 
 
   const IndustryFeilds = [
     { value: "residential_roofing", label: "Residential Roofing" },
