@@ -65,8 +65,7 @@ const AdminPage = () => {
 
         const resData = response.data;
         setDataState({ loading: false, data: resData.data });
-      } catch  {
-       
+      } catch {
         setDataState({ loading: false, data: { records: [] } });
       }
     };
@@ -80,11 +79,9 @@ const AdminPage = () => {
       name === "Product_Price__c" ? (value ? Number(value) : null) : value;
     setInputData({ ...inputData, [name]: parsedValue });
     if (inputData.name.length >= 2) {
-   
       setError({ ...error, name: "" });
     }
     if ((inputData.Product_Price__c as number) > 0) {
-    
       setError({ ...error, Product_Price__c: "" });
     }
   }
@@ -132,8 +129,7 @@ const AdminPage = () => {
           color: "red",
         });
       }
-    } catch  {
-   
+    } catch {
       setNewRes({
         feedbackMessage: "An error occurred. Please try again.",
         loading: false,
@@ -145,7 +141,7 @@ const AdminPage = () => {
   return (
     <>
       {dataState.loading ? (
-        <Loader span="Loading Data" />
+        <Loader />
       ) : (
         <div className="flex flex-col justify-center items-center p-6">
           <h1 className="text-2xl font-bold mb-4">Add New Product</h1>

@@ -6,22 +6,21 @@ export const apiClient = axios.create({
   timeout: 10000,
 });
 
-const isTokenExpired = (
+export const isTokenExpired = (
   token: string | null = localStorage.getItem("token") || null
 ) => {
   if (!token) return true;
   try {
     const payload = JSON.parse(atob(token.split(".")[1]));
+    const isExpired = payload.exp < Date.now() / 1000;
     // console.log("Decoded token payload: ", payload);
-    // console.log("Expiration check: ", payload.exp < Date.now() / 1000);
+    // console.log("Expiration check: ",isExpired);
     // console.log("time", payload.exp - Date.now() / 1000);
-    const data = {
-      permission: payload.role,
-      isExp: payload.exp < Date.now() / 1000,
+    return {
+      isExp: isExpired,
+      permission: payload.role as string,
     };
-    return data;
-    // return payload.exp < Date.now() / 1000;
-  } catch  {
+  } catch {
     // console.error("Error decoding token or invalid token format", error);
     return true;
   }
@@ -30,14 +29,10 @@ const isTokenExpired = (
 apiClient.interceptors.request.use(
   (config) => {
     const token: string | null = localStorage.getItem("token");
-    // console.log("Token from localStorage: ", token);
     const isExp: any = isTokenExpired(token);
-      //  if token exists and is not expired
     if (token && !isExp.isExp) {
-      // console.log("Token is valid, adding to headers...");
       config.headers.Authorization = `Bearer ${token}`;
     } else {
-      // console.log("Token is expired or not found, redirecting to login...");
       localStorage.removeItem("token");
       window.location.replace("/login");
     }

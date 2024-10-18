@@ -10,7 +10,7 @@ import {
 import { dbInstance } from "../config/dbConnection.cjs";
 import { users } from "../models/userModel.js";
 import { eq } from "drizzle-orm";
-import { MAILER_EMAIL, MAILER_PASSWORD } from "../useENV.js";
+import { FRONTEND_URL, MAILER_EMAIL, MAILER_PASSWORD } from "../useENV.js";
 import {
   userForgetPasswordSchema,
   userLoginSchema,
@@ -157,14 +157,13 @@ export async function forgetPassword(req, res) {
     if (!userExists?.[0]) {
       return res
         .status(400)
-        .json({ success: false, message: "Invalid Email Address" });
+        .json({ success: false, message: "Email address does not exist." });
     }
-    console.log(userExists);
     const token = jwt.sign(
       { id: userExists?.[0].id },
       userExists?.[0].password,
       {
-        expiresIn: "30m",
+        expiresIn: "10m",
       }
     );
     console.log(token);
@@ -179,24 +178,25 @@ export async function forgetPassword(req, res) {
       },
     });
     // Email configuration
-    let resetLink = `http://localhost:3000/api/v1/auth/reset-password/${token}`;
-    res.json({ resetLink });
+    let resetLink = `${FRONTEND_URL}/reset-password/${token}`;
     const mailOptions = {
       from: MAILER_EMAIL,
       to: req.body.email,
       subject: "Reset Password",
       html: `
-    <div style="font-family: 'Work Sans', sans-serif; padding: 20px; max-width: 600px; margin: auto; border: 1px solid #e1e1e1; border-radius: 10px; background-color: #f5f5f5;">
+     <div style="font-family: 'Work Sans', sans-serif; padding: 20px; max-width: 600px; margin: auto; border: 1px solid #e1e1e1; border-radius: 10px; background-color: #f5f5f5;">
       <h1 style="color: #ea7600; text-align: center; font-size: 32px; margin-bottom: 20px;">Reset Your Password</h1>
-      <p style="color: #444; font-size: 17px;">Hi,</p>
       <p style="color: #444; font-size: 17px;">We received a request to reset your password. Click on the link below to reset it:</p>
       <p style="text-align: center;">
         <a href="${resetLink}" style="display: inline-block; padding: 10px 20px; background-color: #F6841F; color: white; text-decoration: none; border-radius: 5px; font-weight: bold; font-size: 19px;">Click Here to Reset Your Password</a>
       </p>
+      <p>or directly paste the link below in your browser:</p>
+      <p style="text-align: center;">
+        <a href="${resetLink}" style="color: #F6841F; font-weight: bold;">${resetLink}</a>
+      </p>
       <p style="color: #444; font-size: 17px;">This link is valid for 10 minutes and can only be used once.</p>
       <p style="color: #444; font-size: 17px;">If you didn't request a password reset, please ignore this email.</p>
       <p style="color: #444; font-size: 17px;">Thank you!</p>
-      <p style="color: #444; font-size: 17px;">Best regards,<br>Equipter.com</p>
     </div>
   `,
     };
@@ -205,10 +205,11 @@ export async function forgetPassword(req, res) {
       if (err) {
         console.log(err);
         return res.status(500).json({ message: err.message, success: false });
+      }else{
+        console.log("call")
+         res.status(200).json({ message: "Password reset link sent.", success: true });
       }
-      res
-        .status(200)
-        .json({ message: "Password reset link sent.", success: true });
+     
     });
   } catch (error) {
     return res
@@ -222,7 +223,7 @@ export async function resetPassword(req, res) {
     const { token } = req.params;
 
     let decoded = jwt.decode(token);
-    console.log("Decoed 1", decoded);
+    console.log("Decoded", decoded);
     if (!decoded?.id) {
       return res
         .status(400)
@@ -233,6 +234,7 @@ export async function resetPassword(req, res) {
       .select()
       .from(users)
       .where(eq(users.id, decoded.id));
+      console.log(userExists)
 
     if (!userExists?.[0]) {
       return res
@@ -269,7 +271,7 @@ export async function resetPassword(req, res) {
     if (isSamePassword) {
       return res.status(400).json({
         success: false,
-        message: "New password cannot be the same as the old password.",
+        message: "Please choose more secure password.",
       });
     }
 
@@ -284,7 +286,7 @@ export async function resetPassword(req, res) {
 
     return res
       .status(200)
-      .json({ success: true, message: "Password reset successfully." });
+      .json({ success: true, message: "Password updated successfully!" });
   } catch (error) {
     console.log(error);
     return res

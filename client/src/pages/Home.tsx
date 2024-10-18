@@ -21,7 +21,6 @@ const Home = () => {
   const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
- 
 
   const IndustryFeilds = [
     { value: "residential_roofing", label: "Residential Roofing" },
@@ -191,11 +190,7 @@ const Home = () => {
               </p>
             </div>
             <div className="col-span-1 md:col-span-2 w-full text-center">
-              <input
-                type="submit"
-                value="Build Now"
-                className="btn-yellow"
-              />
+              <input type="submit" value="Build Now" className="btn-yellow" />
             </div>
           </form>
         </div>

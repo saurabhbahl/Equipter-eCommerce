@@ -20,6 +20,7 @@ export const PrivateRoute = ({ role }: PrivateRouteProps) => {
   const { token, user } = useAuth();
 
   if (!token) {
+    console.log("call")
     return <Navigate to="/login" />;
   }
 

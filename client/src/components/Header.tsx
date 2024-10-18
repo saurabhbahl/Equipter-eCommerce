@@ -24,14 +24,14 @@ const Header = () => {
             }
           );
           setIsAdmin(response.data.success);
-        } catch (error:any) {
+        } catch (error: any) {
           const { data } = error.response;
           if (data && data.message === "Access denied." && !data.success) {
             setIsAdmin(false);
             return;
-          } else if (data &&data.message === "Invalid token." &&!data.success) {
+          } else if (data && data.message === "Invalid token." && !data.success) {
             logOut();
-          } else if (data &&data.message === "Token expired." &&!data.success) {
+          } else if (data && data.message === "Token expired." && !data.success) {
             logOut();
           }
           setIsAdmin(false);
@@ -51,41 +51,43 @@ const Header = () => {
   }
 
   return (
-    <header>
-      <div className="container flex justify-between items-center">
+    <header className="bg-white shadow-md">
+      <div className="container mx-auto flex justify-between items-center p-4 py-1.5">
         <Link to={"/"}>
           <img src={logo} alt="Logo" width="64px" />
         </Link>
-        {!token ? (
-          <div className="flex gap-5 font-work-sans text-md">
-            <Link to={"/"} className="font-work-sans text-custom-orange">
-              Home
-            </Link>
-            <Link to={"/login"} className="font-work-sans text-custom-orange">
-              Login
-            </Link>
-          </div>
-        ) : (
-          <div className="flex justify-center items-center gap-5 font-work-sans text-md">
-            <Link to={"/"} className="font-work-sans text-custom-orange">
-              Home
-            </Link>
-            <Link to={"/sample"} className="font-work-sans text-custom-orange">
-              Sample
-            </Link>
-            {isAdmin && ( // admin link only if the user is confirmed as admin
-              <Link to={"/admin"} className="font-work-sans text-custom-orange">
-                Admin
+        <nav className="flex items-center space-x-5 font-work-sans text-md">
+          {!token ? (
+            <>
+              <Link to={"/"} className="text-custom-orange hover:text-custom-orange/70 transition">
+                Home
               </Link>
-            )}
-            <button
-              onClick={() => logOut()}
-              className="btn-yellow text-sm !p-2"
-            >
-              Logout
-            </button>
-          </div>
-        )}
+              <Link to={"/login"} className="text-custom-orange hover:text-custom-orange/70 transition">
+                Login
+              </Link>
+            </>
+          ) : (
+            <>
+              <Link to={"/"} className="text-custom-orange hover:text-custom-orange/70 transition">
+                Home
+              </Link>
+              <Link to={"/sample"} className="text-custom-orange hover:text-custom-orange/70 transition">
+                Sample
+              </Link>
+              {isAdmin && (
+                <Link to={"/admin"} className="text-custom-orange hover:text-custom-orange/70 transition">
+                  Admin
+                </Link>
+              )}
+              <button
+                onClick={() => logOut()}
+                className="btn-yellow text-sm p-2  transition"
+              >
+                Logout
+              </button>
+            </>
+          )}
+        </nav>
       </div>
     </header>
   );
