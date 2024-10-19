@@ -35,6 +35,6 @@
   "devDependencies": {
     "drizzle-kit": "^0.24.2"
   },"engines": {
-    "node": "22.x"
+    "node": "20.x"
   }
 }
