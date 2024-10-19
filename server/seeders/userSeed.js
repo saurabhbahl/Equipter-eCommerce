@@ -8,8 +8,8 @@ export async function userSeed() {
   const hashedPassword = await hashPassword("123456", salt);
   const dummyUsers = [
     {
-      name: "test",
-      email: "test@test.com",
+      name: "Admin User",
+      email: "vigoroustesla5@typingsquirrel.com",
       password: hashedPassword,
       role: "admin",
     },

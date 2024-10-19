@@ -7,7 +7,8 @@
     "dev": "vite --host",
     "build": "npx tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "start": "serve -s dist or build"
   },
   "dependencies": {
     "@fortawesome/free-solid-svg-icons": "^6.6.0",
@@ -18,6 +19,7 @@
     "react-dom": "^18.3.1",
     "react-hot-toast": "^2.4.1",
     "react-router-dom": "^6.26.2",
+    "serve": "^14.2.4",
     "zod": "^3.23.8"
   },
   "devDependencies": {

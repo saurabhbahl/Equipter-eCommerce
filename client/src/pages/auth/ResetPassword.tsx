@@ -59,9 +59,9 @@ const ResetPassword = () => {
       const res = isTokenExpired(token) as ITokenRes;
       console.log(res);
 
-      if (res.isExp) {
-        setIsTokenExp(res.isExp);
-      }
+      if (res) {
+        setIsTokenExp(res.isExp || res);
+       }
     } else {
       setInValidToken(true);
     }
