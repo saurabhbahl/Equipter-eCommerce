@@ -3,8 +3,8 @@ import fs from "fs";
 import crypto from "crypto";
 import { JWT_SECRET, TOKEN_ENC_ALGO } from "../useENV.js";
 
-const publicKey = fs.readFileSync("./public.key", "utf8");
-const privateKey = fs.readFileSync("./private.key", "utf8");
+// const publicKey = fs.readFileSync("./public.key", "utf8");
+// const privateKey = fs.readFileSync("./private.key", "utf8");
 
 // Middleware to verify JWT token
 export function verifyToken(req, res, next) {

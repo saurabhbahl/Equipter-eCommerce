@@ -5,8 +5,8 @@ import jwt from "jsonwebtoken";
 import { JWT_SECRET, TOKEN_ENC_ALGO } from "../useENV.js";
 import { console } from "inspector";
 
-const privateKey = fs.readFileSync("./private.key", "utf8");
-const publicKey = fs.readFileSync("./public.key", "utf8");
+// const privateKey = fs.readFileSync("./private.key", "utf8");
+// const publicKey = fs.readFileSync("./public.key", "utf8");
 
 // Function to generate salt
 export async function getSalt() {
