@@ -1,27 +1,32 @@
-// "use server"
-// import { ReactElement, useState } from "react";
-// import { Navigate } from "react-router-dom";
+// import { Navigate, Outlet } from "react-router-dom";
+// import { useAuth } from "../hooks/useAuth";
 
+// export const PrivateRoute = () => {
+//   const { token } = useAuth();
+
+//   if (!token) {
+//     return <Navigate to={"/login"} />;
+//   }
+//   return <Outlet />;
+// };
 import { Navigate, Outlet } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
 
-// interface PrivateRouteProps {
-//   Component: React.ComponentType;
-// }
+interface PrivateRouteProps {
+  role?: string;
+}
 
-// const PrivateRoute = ({ Component }: PrivateRouteProps): ReactElement => {
-//   const [isAuthenticated, setIsAuthenticated] = useState(false);
-
-//   return isAuthenticated ? <Component /> : <Navigate to={"/login"} />;
-// };
-
-// export default PrivateRoute;
-
-export const PrivateRoute = () => {
-  const { token } = useAuth();
+export const PrivateRoute = ({ role }: PrivateRouteProps) => {
+  const { token, user } = useAuth();
 
   if (!token) {
-    return <Navigate to={"/login"} />;
+    console.log("call")
+    return <Navigate to="/login" />;
   }
+
+  if (role && user?.role !== role) {
+    return <Navigate to="/" />;
+  }
+
   return <Outlet />;
 };

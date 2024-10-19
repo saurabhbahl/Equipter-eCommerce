@@ -1,9 +1,9 @@
 "use server";
 import { useEffect, useState } from "react";
-import Loader from "../components/Loader";
-import { BackendUrl } from "../utils/url";
-import InputField from "../components/InputFeild";
-import { productSchema } from "../types/schemas/ProductSchema";
+import Loader from "../../components/Loader";
+import InputField from "../../components/InputFeild";
+import { productSchema } from "../../types/schemas/ProductSchema";
+import { apiClient } from "../../utils/axios";
 
 interface ProductRecord {
   Id: string;
@@ -23,7 +23,7 @@ interface InputState {
   Product_Price__c: number | null;
 }
 
-const DynamicPage = () => {
+const AdminPage = () => {
   const [dataState, setDataState] = useState<DataState>({
     data: { records: [] },
     loading: true,
@@ -53,22 +53,19 @@ const DynamicPage = () => {
       };
 
       try {
-        const response = await fetch(`${BackendUrl}/sf/query`, {
-          method: "POST",
+        const response = await apiClient.post(`/sf/query`, query, {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(query),
         });
 
-        if (!response.ok) {
+        if (!response.data.success) {
           throw new Error("Failed to fetch products");
         }
 
-        const resData = await response.json();
+        const resData = response.data;
         setDataState({ loading: false, data: resData.data });
-      } catch (error) {
-        console.error("Error fetching data:", error);
+      } catch {
         setDataState({ loading: false, data: { records: [] } });
       }
     };
@@ -82,11 +79,9 @@ const DynamicPage = () => {
       name === "Product_Price__c" ? (value ? Number(value) : null) : value;
     setInputData({ ...inputData, [name]: parsedValue });
     if (inputData.name.length >= 2) {
-      console.log("call");
       setError({ ...error, name: "" });
     }
     if ((inputData.Product_Price__c as number) > 0) {
-      console.log("call");
       setError({ ...error, Product_Price__c: "" });
     }
   }
@@ -111,16 +106,13 @@ const DynamicPage = () => {
     setNewRes({ feedbackMessage: null, loading: true, color: null });
 
     try {
-      const raw = await fetch(`${BackendUrl}/sf/object/new`, {
-        method: "POST",
+      const res = await apiClient.post(`/sf/object/new`, data, {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(data),
       });
 
-      const res = await raw.json();
-      if (res.success) {
+      if (res.data.success) {
         setNewRes({
           feedbackMessage: "Product Added Successfully",
           loading: false,
@@ -137,8 +129,7 @@ const DynamicPage = () => {
           color: "red",
         });
       }
-    } catch (error) {
-      console.error("Error adding product:", error);
+    } catch {
       setNewRes({
         feedbackMessage: "An error occurred. Please try again.",
         loading: false,
@@ -150,7 +141,7 @@ const DynamicPage = () => {
   return (
     <>
       {dataState.loading ? (
-        <Loader span="Loading Data" />
+        <Loader />
       ) : (
         <div className="flex flex-col justify-center items-center p-6">
           <h1 className="text-2xl font-bold mb-4">Add New Product</h1>
@@ -230,4 +221,4 @@ const DynamicPage = () => {
   );
 };
 
-export default DynamicPage;
+export default AdminPage;

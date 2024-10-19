@@ -1,9 +1,14 @@
 import { Route, Routes } from "react-router-dom";
 import Header from "./components/Header";
 import Home from "./pages/Home";
-import LoginPage from "./pages/LoginPage";
+import LoginPage from "./pages/auth/LoginPage";
 import { PrivateRoute } from "./components/PrivateRoute";
-import DynamicPage from "./pages/DynamicPage";
+import { PublicRoute } from "./components/PublicRoute";
+import SamplePage from "./pages/SamplePage";
+import AdminPage from "./pages/admin/AdminPage";
+import ForgetPassword from "./pages/auth/ForgetPassword";
+import ResetPassword from "./pages/auth/ResetPassword";
+import NotFound from "./pages/NotFound";
 
 export default function App() {
   return (
@@ -11,10 +16,39 @@ export default function App() {
       <Header />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route element={<PrivateRoute />}>
-          <Route path="/dynamicpage" element={<DynamicPage />} />
+        {/* <Route path="/forget-password" element={<ForgetPassword />} /> */}
+
+        {/* <Route
+          path="/login"
+          element={<PublicRoute element={<LoginPage />} />}
+        />
+        <Route
+          path="/forget-password"
+          element={<PublicRoute element={<ForgetPassword />} />}
+        />
+        <Route
+          path="/reset-password/:token"
+          element={<PublicRoute element={<ResetPassword />} />}
+        /> */}
+        
+        {/* Public routes (logined users can't access these routes)*/}
+        <Route element={<PublicRoute />}>
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/forget-password" element={<ForgetPassword />} />
+          <Route path="/reset-password/:token" element={<ResetPassword />} />
         </Route>
+
+        {/*  admin route */}
+        <Route element={<PrivateRoute role="admin" />}>
+          <Route path="/admin" element={<AdminPage />} />
+        </Route>
+
+        {/* routes for authenticated users  */}
+        <Route element={<PrivateRoute />}>
+          <Route path="/sample" element={<SamplePage />} />
+        <Route path="*" element={<NotFound />} />
+        </Route>
+        {/* not found */}
       </Routes>
     </>
   );

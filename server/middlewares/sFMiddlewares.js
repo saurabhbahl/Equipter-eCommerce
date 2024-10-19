@@ -1,3 +1,5 @@
+import { SF_ACCESS_TOKEN_URL } from "../useENV.js";
+
 let sfAccessToken = null;
 
 export async function checkSFAccessToken(req, res, next) {
@@ -7,7 +9,7 @@ export async function checkSFAccessToken(req, res, next) {
       req.accessToken = sfAccessToken; 
       return next(); 
     }
-    const response = await fetch(process.env.SF_ACCESS_TOKEN_URL, {
+    const response = await fetch(SF_ACCESS_TOKEN_URL, {
       method: "POST",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",

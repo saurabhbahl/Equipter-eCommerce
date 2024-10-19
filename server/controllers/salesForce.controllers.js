@@ -1,4 +1,5 @@
 import { verifyRequestBody } from "../middlewares/checkRequestBody.js";
+import { SF_INSTANCE_URL, SF_OBJECT_URL } from "../useENV.js";
 //Used to perform the query in salesforce data
 export async function sFQuery(req, res) {
   try {
@@ -17,7 +18,7 @@ export async function sFQuery(req, res) {
     }
 
     const sfQueryUrl = `${
-      process.env.SF_INSTANCE_URL
+      SF_INSTANCE_URL
     }/services/data/v52.0/query/?q=${encodeURIComponent(query)}`;
     const sfRes = await fetch(sfQueryUrl, {
       method: "GET",
@@ -52,7 +53,7 @@ export async function sFAddNewObject(req, res) {
     if (missingFields) {
       return res.status(400).json({ success: false, data: { missingFields } });
     }
-    const objectUrl = `${process.env.SF_OBJECT_URL}/${req.body.objectName}`;
+    const objectUrl = `${SF_OBJECT_URL}/${req.body.objectName}`;
     console.log(objectUrl);
     const { objectName, ...dataToSend } = req.body;
     const sFResp = await fetch(objectUrl, {
